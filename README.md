@@ -6,6 +6,8 @@
 
 作者の実行環境: Windows 11 + Node.js v24.16.0 (nvm-windows)
 
+デモ動画: https://twitter.com/rin_montblank/status/2076739400122466485
+
 ```bash
 npm run build
 npm start
