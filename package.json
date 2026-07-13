@@ -1,0 +1,27 @@
+{
+  "name": "nabeatsu_demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "nabeatsu.js",
+  "scripts": {
+    "start": "node dist/main.js",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@geolonia/japanese-numeral": "^1.0.2",
+    "jaconv": "^1.1.2",
+    "kuroshiro": "^1.2.0",
+    "kuroshiro-analyzer-kuromoji": "^1.1.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.5",
+    "typescript": "^7.0.2"
+  }
+}
