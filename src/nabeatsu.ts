@@ -54,6 +54,8 @@ export async function convertIdiot(
 
   result = result.replace(/ュウ/g, "ュー");
 
+  result = result.replace(/サン$/, "サァン");
+
   result += "www";
 
   if (options.divisibleBy3 && options.includes3) {
