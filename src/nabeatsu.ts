@@ -58,11 +58,11 @@ export async function convertIdiot(
   result = result
     .replace(/サンヒャク/g, "サンビャク")
     .replace(/ロクヒャク/g, "ロッピャク")
-    .replace(/ハチヒャク/g, "ハッピャク")
+    .replace(/ハチヒャク/g, "ハッピャク");
 
   result = result
     .replace(/サンセン/g, "サンゼン")
-    .replace(/ハチセン/g, "ハッセン")
+    .replace(/ハチセン/g, "ハッセン");
 
   result = result.replace(/サン$/, "サァン");
 
