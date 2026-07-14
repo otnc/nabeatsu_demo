@@ -2,7 +2,7 @@
   "name": "nabeatsu_demo",
   "version": "1.0.0",
   "description": "",
-  "main": "nabeatsu.js",
+  "main": "dist/main.js",
   "scripts": {
     "start": "node dist/main.js",
     "build": "tsc",
