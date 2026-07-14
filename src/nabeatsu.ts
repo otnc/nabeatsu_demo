@@ -40,10 +40,11 @@ export function isNabeatsu(
   return result;
 }
 
-export async function convertIdiot(
-  n: number,
-  s: Nabeatsu = { divisible: false, includes: false }
-): Promise<string> {
+export async function convertIdiot(n: number, s: Nabeatsu): Promise<string> {
+  if (!s.divisible && !s.includes) {
+    return n.toString();
+  }
+
   await initKuroshiro();
 
   const kanji = number2kanji(n);
