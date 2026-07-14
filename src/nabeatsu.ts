@@ -64,7 +64,7 @@ export async function convertIdiot(
     .replace(/サンセン/g, "サンゼン")
     .replace(/ハチセン/g, "ハッセン");
 
-  result = result.replace(/サン$/, "サァン");
+  result = result.replace(/サン/g, "サァン");
 
   result += "www";
 
