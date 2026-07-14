@@ -29,25 +29,54 @@ jobs:
 
       - run: npm ci
 
-      - run: npm version "${{ inputs.version }}" --no-git-tag-version
+      - name: Resolve target version
+        id: version
+        run: |
+          current="$(node -p "require('./package.json').version")"
+          input="${{ inputs.version }}"
+          if [ "$input" = "$current" ]; then
+            echo "package.json is already at $current; skipping version bump."
+          else
+            npm version "$input" --no-git-tag-version
+          fi
+          version="$(node -p "require('./package.json').version")"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Ensure version isn't already published
+        run: |
+          name="$(node -p "require('./package.json').name")"
+          version="${{ steps.version.outputs.version }}"
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "::error::$name@$version is already published to npm."
+            exit 1
+          fi
 
       - run: npm run typecheck
 
       - run: npm run build
 
-      - run: npm publish --provenance --access public
-
       - name: Commit and tag version bump
         run: |
+          version="${{ steps.version.outputs.version }}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add package.json package-lock.json
-          git commit -m "chore: release v${{ inputs.version }}"
-          git tag "v${{ inputs.version }}"
-          git push
-          git push origin "v${{ inputs.version }}"
+          if ! git diff --quiet -- package.json package-lock.json; then
+            git add package.json package-lock.json
+            git commit -m "chore: release v$version"
+            git push
+          fi
+          if ! git ls-remote --exit-code --tags origin "refs/tags/v$version" >/dev/null 2>&1; then
+            git tag "v$version"
+            git push origin "v$version"
+          fi
+
+      # npm publish は取り消せない (unpublish には厳しい制限がある) ため、
+      # commit/tag/push が確実に成功した後に最後に実行する。
+      - run: npm publish --provenance --access public
 
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "v${{ inputs.version }}" --title "v${{ inputs.version }}" --generate-notes
+        run: |
+          version="${{ steps.version.outputs.version }}"
+          gh release create "v$version" --title "v$version" --generate-notes
