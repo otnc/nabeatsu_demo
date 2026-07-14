@@ -1,6 +1,6 @@
 {
   "name": "nabeatsu.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ナベアツ判定・変換ライブラリ",
   "type": "module",
   "main": "./dist/nabeatsu.cjs",
