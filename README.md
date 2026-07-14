@@ -33,6 +33,65 @@ if (result.divisible || result.includes) {
 const { isNabeatsu, convertIdiot } = require("nabeatsu.js");
 ```
 
+## API
+
+### `isNabeatsu(n, options?)`
+
+数値がナベアツ的に「アホになる」対象かどうかを判定します。
+
+| 引数      | 型                | 必須 | 説明                                                 |
+| --------- | ----------------- | ---- | ---------------------------------------------------- |
+| `n`       | `number`          | ✅   | 判定対象の数値                                       |
+| `options` | `NabeatsuOptions` | –    | 判定基準(割り切れる/含む)。省略時は `{ divisible: 3, includes: "3" }` |
+
+`NabeatsuOptions`:
+
+| プロパティ  | 型       | デフォルト | 説明                                                   |
+| ----------- | -------- | ---------- | ------------------------------------------------------ |
+| `divisible` | `number` | `3`        | この数値で割り切れる場合にアホになる                   |
+| `includes`  | `string` | `"3"`      | 数値の文字列表現にこの文字列が含まれる場合にアホになる |
+
+戻り値 `Nabeatsu`:
+
+| プロパティ  | 型        | 説明                                      |
+| ----------- | --------- | ----------------------------------------- |
+| `divisible` | `boolean` | `n % options.divisible === 0`             |
+| `includes`  | `boolean` | `n.toString().includes(options.includes)` |
+
+```ts
+isNabeatsu(3); // { divisible: true, includes: true }
+isNabeatsu(13); // { divisible: false, includes: true }
+isNabeatsu(9, { divisible: 5, includes: "9" }); // { divisible: false, includes: true }
+```
+
+### `convertIdiot(n, s?)`
+
+数値を「アホになったときの読み方」(カタカナ)に変換します。内部で [kuroshiro](https://www.npmjs.com/package/kuroshiro) と [kuroshiro-analyzer-kuromoji](https://www.npmjs.com/package/kuroshiro-analyzer-kuromoji) を使って漢数字→カタカナ変換しているため、初回呼び出し時に辞書の読み込みが発生し多少時間がかかります(2回目以降は初期化済みのインスタンスを再利用します)。
+
+| 引数 | 型         | 必須 | 説明                                                                                                          |
+| ---- | ---------- | ---- | ------------------------------------------------------------------------------------------------------------- |
+| `n`  | `number`   | ✅   | 変換対象の数値                                                                                                |
+| `s`  | `Nabeatsu` | –    | `isNabeatsu()` の結果。省略時は `{ divisible: false, includes: false }`。両方 `true` のとき末尾に `!?` が付く |
+
+戻り値: `Promise<string>` — 変換後の文字列(半角カナ)
+
+変換ルール:
+
+1. 数値を漢数字に変換し、カタカナ読みに変換
+2. 「ュウ」→「ュー」
+3. 「サンヒャク」→「サンビャク」、「ロクヒャク」→「ロッピャク」、「ハチヒャク」→「ハッピャク」
+4. 「サンセン」→「サンゼン」、「ハチセン」→「ハッセン」
+5. 「サン」→「サァン」(文字列中のすべての「サン」が対象)
+6. 末尾に `www` を追加
+7. `s.divisible && s.includes` が両方 `true` の場合、さらに `!?` を追加
+8. 半角カナに変換して返す
+
+```ts
+await convertIdiot(3, isNabeatsu(3)); // "ｻｧﾝwww!?"
+await convertIdiot(13, isNabeatsu(13)); // "ｼﾞｭｰｻｧﾝwww"
+await convertIdiot(4); // "ﾖﾝwww" (sを省略した場合は "!?" が付かない)
+```
+
 ## Development
 
 ```bash
