@@ -42,26 +42,26 @@ const { isNabeatsu, convertIdiot } = require("nabeatsu.js");
 | 引数      | 型                | 必須 | 説明                                                                  |
 | --------- | ----------------- | ---- | --------------------------------------------------------------------- |
 | `n`       | `number`          | ✅   | 判定対象の数値                                                        |
-| `options` | `NabeatsuOptions` | –    | 判定基準(割り切れる/含む)。省略時は `{ divisible: 3, includes: "3" }` |
+| `options` | `NabeatsuOptions` | –    | 判定基準(割り切れる/含む)。省略時は `{ divisible: 3, includes: 3 }` |
 
 `NabeatsuOptions`:
 
-| プロパティ  | 型       | デフォルト | 説明                                                   |
-| ----------- | -------- | ---------- | ------------------------------------------------------ |
-| `divisible` | `number` | `3`        | この数値で割り切れる場合にアホになる                   |
-| `includes`  | `string` | `"3"`      | 数値の文字列表現にこの文字列が含まれる場合にアホになる |
+| プロパティ  | 型       | デフォルト | 説明                                                             |
+| ----------- | -------- | ---------- | ---------------------------------------------------------------- |
+| `divisible` | `number` | `3`        | この数値で割り切れる場合にアホになる                              |
+| `includes`  | `number` | `3`        | 数値の文字列表現にこの数値の文字列表現が含まれる場合にアホになる  |
 
 戻り値 `Nabeatsu`:
 
-| プロパティ  | 型        | 説明                                      |
-| ----------- | --------- | ----------------------------------------- |
-| `divisible` | `boolean` | `n % options.divisible === 0`             |
-| `includes`  | `boolean` | `n.toString().includes(options.includes)` |
+| プロパティ  | 型        | 説明                                                 |
+| ----------- | --------- | ---------------------------------------------------- |
+| `divisible` | `boolean` | `n % options.divisible === 0`                        |
+| `includes`  | `boolean` | `n.toString().includes(options.includes.toString())` |
 
 ```ts
 isNabeatsu(3); // { divisible: true, includes: true }
 isNabeatsu(13); // { divisible: false, includes: true }
-isNabeatsu(9, { divisible: 5, includes: "9" }); // { divisible: false, includes: true }
+isNabeatsu(9, { divisible: 5, includes: 9 }); // { divisible: false, includes: true }
 ```
 
 ### `convertIdiot(n, s?)`
