@@ -18,31 +18,28 @@ async function initKuroshiro() {
   }
 }
 
+export interface NabeatsuOptions {
+  divisible: number;
+  includes: string;
+}
+
 export interface Nabeatsu {
-  divisibleBy: boolean;
+  divisible: boolean;
   includes: boolean;
 }
 
-export function isNabeatsu(n: number): Nabeatsu {
+export function isNabeatsu(n: number, options: NabeatsuOptions = { divisible: div, includes: inc }): Nabeatsu {
   const result: Nabeatsu = {
-    divisibleBy: false,
-    includes: false,
+    divisible: n % options.divisible == 0,
+    includes: n.toString().includes(options.includes),
   };
-
-  if (n % div === 0) {
-    result.divisibleBy = true;
-  }
-
-  if (n.toString().includes(inc)) {
-    result.includes = true;
-  }
 
   return result;
 }
 
 export async function convertIdiot(
   n: number,
-  options: Nabeatsu
+  s: Nabeatsu = { divisible: false, includes: false },
 ): Promise<string> {
   await initKuroshiro();
 
@@ -68,7 +65,7 @@ export async function convertIdiot(
 
   result += "www";
 
-  if (options.divisibleBy && options.includes) {
+  if (s.divisible && s.includes) {
     result += "!?";
   }
 

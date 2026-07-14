@@ -10,7 +10,7 @@ function sleep(time: number): Promise<void> {
 while (true) {
   const result: Nabeatsu = isNabeatsu(i);
 
-  if (result.divisibleBy || result.includes) {
+  if (result.divisible || result.includes) {
     const idiotText = await convertIdiot(i, result);
     console.log(`${idiotText} (${i})`);
   } else {
