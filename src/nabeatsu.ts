@@ -28,7 +28,10 @@ export interface Nabeatsu {
   includes: boolean;
 }
 
-export function isNabeatsu(n: number, options: NabeatsuOptions = { divisible: div, includes: inc }): Nabeatsu {
+export function isNabeatsu(
+  n: number,
+  options: NabeatsuOptions = { divisible: div, includes: inc }
+): Nabeatsu {
   const result: Nabeatsu = {
     divisible: n % options.divisible == 0,
     includes: n.toString().includes(options.includes),
@@ -39,7 +42,7 @@ export function isNabeatsu(n: number, options: NabeatsuOptions = { divisible: di
 
 export async function convertIdiot(
   n: number,
-  s: Nabeatsu = { divisible: false, includes: false },
+  s: Nabeatsu = { divisible: false, includes: false }
 ): Promise<string> {
   await initKuroshiro();
 
