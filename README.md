@@ -64,18 +64,18 @@ isNabeatsu(13); // { divisible: false, includes: true }
 isNabeatsu(9, { divisible: 5, includes: 9 }); // { divisible: false, includes: true }
 ```
 
-### `convertIdiot(n, s?)`
+### `convertIdiot(n, s)`
 
 数値を「アホになったときの読み方」(カタカナ)に変換します。内部で [kuroshiro](https://www.npmjs.com/package/kuroshiro) と [kuroshiro-analyzer-kuromoji](https://www.npmjs.com/package/kuroshiro-analyzer-kuromoji) を使って漢数字→カタカナ変換しているため、初回呼び出し時に辞書の読み込みが発生し多少時間がかかります(2回目以降は初期化済みのインスタンスを再利用します)。
 
-| 引数 | 型         | 必須 | 説明                                                                                                          |
-| ---- | ---------- | ---- | ------------------------------------------------------------------------------------------------------------- |
-| `n`  | `number`   | ✅   | 変換対象の数値                                                                                                |
-| `s`  | `Nabeatsu` | –    | `isNabeatsu()` の結果。省略時は `{ divisible: false, includes: false }`。両方 `true` のとき末尾に `!?` が付く |
+| 引数 | 型         | 必須 | 説明                        |
+| ---- | ---------- | ---- | --------------------------- |
+| `n`  | `number`   | ✅   | 変換対象の数値              |
+| `s`  | `Nabeatsu` | ✅   | `isNabeatsu()` の結果       |
 
 戻り値: `Promise<string>` — 変換後の文字列(半角カナ)
 
-変換ルール:
+`s.divisible` と `s.includes` が両方 `false` の場合は変換を行わず `n.toString()` をそのまま返します。どちらか一方でも `true` の場合のみ、以下の変換ルールが適用されます:
 
 1. 数値を漢数字に変換し、カタカナ読みに変換
 2. 「ュウ」→「ュー」
@@ -89,7 +89,7 @@ isNabeatsu(9, { divisible: 5, includes: 9 }); // { divisible: false, includes: t
 ```ts
 await convertIdiot(3, isNabeatsu(3)); // "ｻｧﾝwww!?"
 await convertIdiot(13, isNabeatsu(13)); // "ｼﾞｭｰｻｧﾝwww"
-await convertIdiot(4); // "ﾖﾝwww" (sを省略した場合は "!?" が付かない)
+await convertIdiot(4, isNabeatsu(4)); // "4" (divisible/includesがどちらもfalseなので変換されない)
 ```
 
 ## Development
