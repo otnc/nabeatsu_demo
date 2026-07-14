@@ -20,7 +20,7 @@ async function initKuroshiro() {
 
 export interface NabeatsuOptions {
   divisible: number;
-  includes: string;
+  includes: number;
 }
 
 export interface Nabeatsu {
@@ -34,7 +34,7 @@ export function isNabeatsu(
 ): Nabeatsu {
   const result: Nabeatsu = {
     divisible: n % options.divisible == 0,
-    includes: n.toString().includes(options.includes),
+    includes: n.toString().includes(options.includes.toString()),
   };
 
   return result;
