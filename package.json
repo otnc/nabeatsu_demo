@@ -1,7 +1,7 @@
 {
   "name": "nabeatsu.js",
   "version": "1.0.0",
-  "description": "数え続ける世界のナベアツ判定・変換ライブラリ",
+  "description": "ナベアツ判定・変換ライブラリ",
   "type": "module",
   "main": "./dist/nabeatsu.cjs",
   "module": "./dist/nabeatsu.mjs",
