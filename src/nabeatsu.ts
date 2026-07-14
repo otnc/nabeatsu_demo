@@ -1,3 +1,4 @@
+import { div, inc } from "./config.js";
 import { number2kanji } from "@geolonia/japanese-numeral";
 import KuroshiroPkg from "kuroshiro";
 import KuromojiAnalyzerPkg from "kuroshiro-analyzer-kuromoji";
@@ -18,22 +19,22 @@ async function initKuroshiro() {
 }
 
 export interface Nabeatsu {
-  divisibleBy3: boolean;
-  includes3: boolean;
+  divisibleBy: boolean;
+  includes: boolean;
 }
 
 export function isNabeatsu(n: number): Nabeatsu {
   const result: Nabeatsu = {
-    divisibleBy3: false,
-    includes3: false,
+    divisibleBy: false,
+    includes: false,
   };
 
-  if (n % 3 === 0) {
-    result.divisibleBy3 = true;
+  if (n % div === 0) {
+    result.divisibleBy = true;
   }
 
-  if (n.toString().includes("3")) {
-    result.includes3 = true;
+  if (n.toString().includes(inc)) {
+    result.includes = true;
   }
 
   return result;
@@ -58,7 +59,7 @@ export async function convertIdiot(
 
   result += "www";
 
-  if (options.divisibleBy3 && options.includes3) {
+  if (options.divisibleBy && options.includes) {
     result += "!?";
   }
 

@@ -1,3 +1,4 @@
+import { interval } from "./config.js";
 import { isNabeatsu, convertIdiot, type Nabeatsu } from "./nabeatsu.js";
 
 let i: number = 1;
@@ -9,7 +10,7 @@ function sleep(time: number): Promise<void> {
 while (true) {
   const result: Nabeatsu = isNabeatsu(i);
 
-  if (result.divisibleBy3 || result.includes3) {
+  if (result.divisibleBy || result.includes) {
     const idiotText = await convertIdiot(i, result);
     console.log(`${idiotText} (${i})`);
   } else {
@@ -17,5 +18,5 @@ while (true) {
   }
 
   i++;
-  await sleep(1000);
+  await sleep(interval);
 }
