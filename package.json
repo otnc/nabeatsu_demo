@@ -1,19 +1,54 @@
 {
-  "name": "nabeatsu_demo",
+  "name": "nabeatsu.js",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/main.js",
+  "description": "数え続ける世界のナベアツ判定・変換ライブラリ",
+  "type": "module",
+  "main": "./dist/nabeatsu.cjs",
+  "module": "./dist/nabeatsu.mjs",
+  "types": "./dist/nabeatsu.d.cts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/nabeatsu.d.mts",
+        "default": "./dist/nabeatsu.mjs"
+      },
+      "require": {
+        "types": "./dist/nabeatsu.d.cts",
+        "default": "./dist/nabeatsu.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/otnc/nabeatsu_demo.git"
+  },
+  "homepage": "https://github.com/otnc/nabeatsu_demo#readme",
+  "bugs": {
+    "url": "https://github.com/otnc/nabeatsu_demo/issues"
+  },
   "scripts": {
-    "start": "node dist/main.js",
-    "build": "tsc",
+    "start": "tsx src/main.ts",
+    "build": "tsdown",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "prepublishOnly": "npm run build"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "nabeatsu",
+    "aho",
+    "japanese"
+  ],
+  "author": "otoneko.",
   "license": "MIT",
-  "type": "module",
   "dependencies": {
     "@geolonia/japanese-numeral": "^1.0.2",
     "jaconv": "^1.1.2",
@@ -22,6 +57,9 @@
   },
   "devDependencies": {
     "prettier": "^3.9.5",
+    "publint": "^0.3.21",
+    "tsdown": "^0.22.7",
+    "tsx": "^4.23.1",
     "typescript": "^7.0.2"
   }
 }
