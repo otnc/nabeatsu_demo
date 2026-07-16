@@ -26,15 +26,20 @@ export interface NabeatsuOptions {
 export interface Nabeatsu {
   divisible: boolean;
   includes: boolean;
+  includesCount: number;
 }
 
 export function isNabeatsu(
   n: number,
   options: NabeatsuOptions = { divisible: div, includes: inc }
 ): Nabeatsu {
+  const regex = new RegExp(options.includes.toString(), "g");
+  const includesResult = n.toString().match(regex);
+  const includesCount = (includesResult || []).length;
   const result: Nabeatsu = {
     divisible: n % options.divisible == 0,
-    includes: n.toString().includes(options.includes.toString()),
+    includes: includesCount > 0,
+    includesCount,
   };
 
   return result;
@@ -70,7 +75,7 @@ export async function convertIdiot(n: number, s: Nabeatsu): Promise<string> {
   result += "www";
 
   if (s.divisible && s.includes) {
-    result += "!?";
+    result += "!?".repeat(s.includesCount);
   }
 
   return jaconv.toHanKana(result);
