@@ -39,7 +39,7 @@ export function isNabeatsu(
   const result: Nabeatsu = {
     divisible: n % options.divisible == 0,
     includes: includesCount > 0,
-    includesCount
+    includesCount,
   };
 
   return result;
