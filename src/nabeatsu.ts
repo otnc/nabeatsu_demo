@@ -72,7 +72,7 @@ export async function convertIdiot(n: number, s: Nabeatsu): Promise<string> {
 
   result = result.replace(/サン/g, "サァン");
 
-  result += "www";
+  result += "www".repeat(s.includesCount || 1);
 
   if (s.divisible && s.includes) {
     result += "!?".repeat(s.includesCount);
