@@ -25,7 +25,6 @@ export interface NabeatsuOptions {
 
 export interface Nabeatsu {
   divisible: boolean;
-  includes: boolean;
   includesCount: number;
 }
 
@@ -38,7 +37,6 @@ export function isNabeatsu(
   const includesCount = (includesResult || []).length;
   const result: Nabeatsu = {
     divisible: n % options.divisible == 0,
-    includes: includesCount > 0,
     includesCount,
   };
 
@@ -46,7 +44,7 @@ export function isNabeatsu(
 }
 
 export async function convertIdiot(n: number, s: Nabeatsu): Promise<string> {
-  if (!s.divisible && !s.includes) {
+  if (!s.divisible && s.includesCount === 0) {
     return n.toString();
   }
 
@@ -74,7 +72,7 @@ export async function convertIdiot(n: number, s: Nabeatsu): Promise<string> {
 
   result += "www".repeat(s.includesCount || 1);
 
-  if (s.divisible && s.includes) {
+  if (s.divisible && s.includesCount > 0) {
     result += "!?".repeat(s.includesCount);
   }
 

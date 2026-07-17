@@ -22,9 +22,9 @@ CommonJS / ESM のどちらからも利用できます。
 import { isNabeatsu, convertIdiot } from "nabeatsu.js";
 
 const n = 3;
-const result = isNabeatsu(n); // { divisible: true, includes: true, includesCount: 1 }
+const result = isNabeatsu(n); // { divisible: true, includesCount: 1 }
 
-if (result.divisible || result.includes) {
+if (result.divisible || result.includesCount > 0) {
   console.log(await convertIdiot(n, result)); // "ｻｧﾝwww!?"
 }
 ```
@@ -56,14 +56,13 @@ const { isNabeatsu, convertIdiot } = require("nabeatsu.js");
 | プロパティ      | 型        | 説明                                                                        |
 | --------------- | --------- | --------------------------------------------------------------------------- |
 | `divisible`     | `boolean` | `n % options.divisible === 0`                                               |
-| `includes`      | `boolean` | `n.toString()` に `options.includes.toString()` が含まれるか(`includesCount > 0`) |
-| `includesCount` | `number`  | `n.toString()` 中に `options.includes.toString()` が出現する回数(重複含む) |
+| `includesCount` | `number`  | `n.toString()` 中に `options.includes.toString()` が出現する回数(重複含む。`0` なら含まない) |
 
 ```ts
-isNabeatsu(3); // { divisible: true, includes: true, includesCount: 1 }
-isNabeatsu(13); // { divisible: false, includes: true, includesCount: 1 }
-isNabeatsu(33); // { divisible: true, includes: true, includesCount: 2 }
-isNabeatsu(9, { divisible: 5, includes: 9 }); // { divisible: false, includes: true, includesCount: 1 }
+isNabeatsu(3); // { divisible: true, includesCount: 1 }
+isNabeatsu(13); // { divisible: false, includesCount: 1 }
+isNabeatsu(33); // { divisible: true, includesCount: 2 }
+isNabeatsu(9, { divisible: 5, includes: 9 }); // { divisible: false, includesCount: 1 }
 ```
 
 ### `convertIdiot(n, s)`
@@ -77,7 +76,7 @@ isNabeatsu(9, { divisible: 5, includes: 9 }); // { divisible: false, includes: t
 
 戻り値: `Promise<string>` — 変換後の文字列(半角カナ)
 
-`s.divisible` と `s.includes` が両方 `false` の場合は変換を行わず `n.toString()` をそのまま返します。どちらか一方でも `true` の場合のみ、以下の変換ルールが適用されます:
+`s.divisible` が `false` かつ `s.includesCount` が `0` の場合は変換を行わず `n.toString()` をそのまま返します。どちらか一方でも条件を満たす場合のみ、以下の変換ルールが適用されます:
 
 1. 数値を漢数字に変換し、カタカナ読みに変換
 2. 「ュウ」→「ュー」
@@ -85,14 +84,14 @@ isNabeatsu(9, { divisible: 5, includes: 9 }); // { divisible: false, includes: t
 4. 「サンセン」→「サンゼン」、「ハチセン」→「ハッセン」
 5. 「サン」→「サァン」(文字列中のすべての「サン」が対象)
 6. 末尾に `www` を追加
-7. `s.divisible && s.includes` が両方 `true` の場合、さらに `!?` を `s.includesCount` 回繰り返して追加(例: `33` は `includesCount: 2` なので `!?!?`)
+7. `s.divisible` が `true` かつ `s.includesCount` が `0` より大きい場合、さらに `!?` を `s.includesCount` 回繰り返して追加(例: `33` は `includesCount: 2` なので `!?!?`)
 8. 半角カナに変換して返す
 
 ```ts
 await convertIdiot(3, isNabeatsu(3)); // "ｻｧﾝwww!?"
 await convertIdiot(13, isNabeatsu(13)); // "ｼﾞｭｰｻｧﾝwww"
 await convertIdiot(33, isNabeatsu(33)); // "ｻｧﾝｼﾞｭｰｻｧﾝwww!?!?"
-await convertIdiot(4, isNabeatsu(4)); // "4" (divisible/includesがどちらもfalseなので変換されない)
+await convertIdiot(4, isNabeatsu(4)); // "4" (divisibleがfalseかつincludesCountが0なので変換されない)
 ```
 
 ## Development
